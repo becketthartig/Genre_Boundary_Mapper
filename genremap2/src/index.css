@@ -1,0 +1,58 @@
+/* ── Reset & Base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Core palette — dark studio aesthetic */
+  --bg-base:        #0a0a0c;
+  --bg-surface:     #111116;
+  --bg-raised:      #18181f;
+  --bg-overlay:     #1f1f28;
+
+  --border:         #2a2a38;
+  --border-bright:  #3d3d52;
+
+  --text-primary:   #e8e8f0;
+  --text-secondary: #7a7a9a;
+  --text-dim:       #44445a;
+
+  /* Accent — electric teal */
+  --accent:         #00e5c3;
+  --accent-dim:     rgba(0, 229, 195, 0.12);
+  --accent-glow:    rgba(0, 229, 195, 0.25);
+
+  /* Cluster colors — 10 distinct, all visible on dark bg */
+  --c0: #00e5c3;
+  --c1: #ff5f7e;
+  --c2: #ffd166;
+  --c3: #6e8efb;
+  --c4: #f97316;
+  --c5: #a78bfa;
+  --c6: #34d399;
+  --c7: #fb7185;
+  --c8: #38bdf8;
+  --c9: #e879f9;
+
+  --font-mono: 'Space Mono', monospace;
+  --font-sans: 'DM Sans', sans-serif;
+
+  --radius: 4px;
+  --radius-lg: 8px;
+}
+
+html, body, #root {
+  height: 100%;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-base); }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 2px; }
+
+/* Selection */
+::selection { background: var(--accent-dim); color: var(--accent); }
