@@ -6,11 +6,13 @@ import SongDetail from './SongDetail'
 import UploadZone from './UploadZone'
 import { api } from './api'
 import styles from './App.module.css'
+import FeatureByGenre from './FeatureByGenre'
+import FeatureCorrelation from './FeatureCorrelation'
 
 const VISUALIZATIONS = [
   { id: 'scatter',    label: 'Genre PCA Map',            available: true  },
-  { id: 'violin',     label: 'Feature by Genre',         available: false },
-  { id: 'heatmap',    label: 'Feature Correlation',      available: false },
+  { id: 'violin',     label: 'Feature by Genre',         available: true },
+  { id: 'heatmap',    label: 'Feature Correlation',      available: true },
 ]
 
 export default function App() {
@@ -139,15 +141,11 @@ export default function App() {
               highlightGenre={highlightGenre}
             />
           )}
-          {!loading && !error && activeViz !== 'scatter' && (
-            <div className={styles.center}>
-              <div className={styles.comingSoon}>
-                <div className={styles.comingSoonLabel}>coming soon</div>
-                <div className={styles.comingSoonTitle}>
-                  {VISUALIZATIONS.find(v => v.id === activeViz)?.label}
-                </div>
-              </div>
-            </div>
+          {!loading && !error && activeViz === 'violin' && (
+            <FeatureByGenre songs={songs} />
+          )}
+          {!loading && !error && activeViz === 'heatmap' && (
+            <FeatureCorrelation songs={songs} />
           )}
         </main>
 
