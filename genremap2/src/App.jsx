@@ -8,24 +8,28 @@ import { api } from './api'
 import styles from './App.module.css'
 import FeatureByGenre from './FeatureByGenre'
 import FeatureCorrelation from './FeatureCorrelation'
+import UMAPScatter3D from './UMAPScatter3D'
+import InfoPanel from './InfoPanel'
 
 const VISUALIZATIONS = [
-  { id: 'scatter',    label: 'Genre PCA Map',            available: true  },
-  { id: 'violin',     label: 'Feature by Genre',         available: true },
-  { id: 'heatmap',    label: 'Feature Correlation',      available: true },
+  { id: 'scatter',    label: 'Genre PCA Map',       available: true  },
+  { id: 'violin',     label: 'Feature by Genre',    available: true },
+  { id: 'heatmap',    label: 'Feature Correlation', available: true },
+  { id: 'umap3d',     label: 'UMAP 3D',             available: true },
 ]
 
 export default function App() {
-  const [songs, setSongs]             = useState([])
-  const [features, setFeatures]       = useState([])
+  const [songs, setSongs]               = useState([])
+  const [features, setFeatures]         = useState([])
   const [selectedSong, setSelectedSong] = useState(null)
   const [highlightGenre, setHighlightGenre] = useState(null)
-  const [activeViz, setActiveViz]     = useState('scatter')
-  const [uploading, setUploading]     = useState(false)
-  const [uploadMsg, setUploadMsg]     = useState(null)   // { type: 'ok'|'err', text }
-  const [loading, setLoading]         = useState(true)
-  const [error, setError]             = useState(null)
-  const [boundaryThreshold, setBoundaryThreshold] = useState(10)  // Show all by default
+  const [activeViz, setActiveViz]       = useState('scatter')
+  const [uploading, setUploading]       = useState(false)
+  const [uploadMsg, setUploadMsg]       = useState(null)
+  const [loading, setLoading]           = useState(true)
+  const [error, setError]               = useState(null)
+  const [boundaryThreshold, setBoundaryThreshold] = useState(10)
+  const [showInfo, setShowInfo]         = useState(false)
 
   // ── Load data ─────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -65,9 +69,8 @@ export default function App() {
 
   // ── Stats ─────────────────────────────────────────────────────────────────
   const genreCount = [...new Set(songs.map(s => s.genre))].length
-  
-  // Filter songs by boundary threshold
-  const filteredSongs = songs.filter(s => 
+
+  const filteredSongs = songs.filter(s =>
     s.boundary_score === null || s.boundary_score === undefined || s.boundary_score <= boundaryThreshold
   )
 
@@ -98,8 +101,17 @@ export default function App() {
               {!v.available && <span className={styles.soon}>soon</span>}
             </button>
           ))}
+          <button
+            className={`${styles.infoBtn} ${showInfo ? styles.infoBtnActive : ''}`}
+            onClick={() => setShowInfo(p => !p)}
+          >
+            ? Info
+          </button>
         </div>
       </header>
+
+      {/* ── Info panel ── */}
+      {showInfo && <InfoPanel activeViz={activeViz} onClose={() => setShowInfo(false)} />}
 
       {/* ── Main canvas ── */}
       <div className={styles.body}>
@@ -147,6 +159,9 @@ export default function App() {
           {!loading && !error && activeViz === 'heatmap' && (
             <FeatureCorrelation songs={songs} />
           )}
+          {!loading && !error && activeViz === 'umap3d' && (
+            <UMAPScatter3D songs={songs} highlightGenre={highlightGenre} />
+          )}
         </main>
 
         {/* Right sidebar — upload + detail */}
@@ -157,8 +172,8 @@ export default function App() {
               <label className={styles.filterLabel}>
                 <span>Max score: {boundaryThreshold === 10 ? 'All' : boundaryThreshold.toFixed(1)}</span>
                 <span className={styles.filterHint}>
-                  {boundaryThreshold < 1.5 ? 'Strong boundary cases' : 
-                   boundaryThreshold < 3 ? 'Moderate boundaries' : 
+                  {boundaryThreshold < 1.5 ? 'Strong boundary cases' :
+                   boundaryThreshold < 3 ? 'Moderate boundaries' :
                    'All songs'}
                 </span>
               </label>
@@ -204,7 +219,18 @@ export default function App() {
 
       {/* ── Footer ── */}
       <footer className={styles.footer}>
-        <span>Scroll to zoom · Drag to pan · Click to select & play audio</span>
+        {activeViz === 'scatter' && (
+          <span>Scroll to zoom · Drag to pan · Click to select & play audio</span>
+        )}
+        {activeViz === 'violin' && (
+          <span>Select a feature above · Hover a box to see stats</span>
+        )}
+        {activeViz === 'heatmap' && (
+          <span>Hover any cell to inspect correlation · Sort by A–Z or variance</span>
+        )}
+        {activeViz === 'umap3d' && (
+          <span>Drag to rotate · Scroll to zoom · Songs closer together sound more alike</span>
+        )}
       </footer>
     </div>
   )

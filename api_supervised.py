@@ -352,3 +352,57 @@ def delete_song(song_id: int) -> dict:
         json.dump(app_state["songs"], f, indent=2)
 
     return {"deleted": song_id}
+
+@app.get("/umap3d")
+def get_umap3d() -> list[dict]:
+    # Return cached result if available
+    if "umap3d_cache" in app_state:
+        return app_state["umap3d_cache"]
+
+    import numpy as np
+    from umap import UMAP
+
+    songs = app_state.get("songs", [])
+    pipeline = app_state.get("pipeline")
+
+    if not songs or not pipeline:
+        raise HTTPException(status_code=503, detail="Data not loaded")
+
+    feat_cols = pipeline["feat_cols"]
+
+    X = []
+    valid_songs = []
+    for s in songs:
+        if s.get("features"):
+            row = [s["features"].get(f, 0.0) for f in feat_cols]
+            X.append(row)
+            valid_songs.append(s)
+
+    if not X:
+        raise HTTPException(status_code=422, detail="No feature data available")
+
+    X = np.array(X, dtype=np.float32)
+    X_scaled = pipeline["scaler"].transform(X)
+
+    reducer = UMAP(
+        n_components=3,
+        n_neighbors=15,
+        min_dist=0.1,
+        random_state=42,
+        verbose=False,
+    )
+    coords = reducer.fit_transform(X_scaled)
+
+    result = []
+    for i, s in enumerate(valid_songs):
+        result.append({
+            "id": s["id"],
+            "filename": s["filename"],
+            "genre": s["genre"],
+            "x3d": float(coords[i, 0]),
+            "y3d": float(coords[i, 1]),
+            "z3d": float(coords[i, 2]),
+        })
+
+    app_state["umap3d_cache"] = result
+    return result

@@ -13,6 +13,7 @@ async function request(path, options = {}) {
 }
 
 export const api = {
+  getUMAP3D: () => request('/umap3d'),
   /** Fetch all songs with coords + features */
   getSongs: () => request('/songs'),
 
