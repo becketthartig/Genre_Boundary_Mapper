@@ -2,7 +2,6 @@
 
 ```
 ### PART 0 ###
-
 # 0. Download the dataset from the link below - make sure in includes the audio etc.
 https://www.kaggle.com/datasets/andradaolteanu/gtzan-dataset-music-genre-classification
 
