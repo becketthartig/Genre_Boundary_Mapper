@@ -1,0 +1,312 @@
+/* GenreSimilarity.module.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 16px 20px;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.loading,
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.errorIcon {
+  font-size: 24px;
+  color: var(--text-dim);
+}
+
+.errorHint {
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  background: var(--bg-raised);
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.errorHint code {
+  color: var(--accent);
+}
+
+/* ── Controls ─────────────────────────────────────────────────────────────── */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.controlLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+}
+
+.methodBtns {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.methodBtn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.methodBtn:hover {
+  color: var(--text-primary);
+  border-color: var(--border-bright);
+}
+
+.methodActive {
+  color: var(--accent) !important;
+  border-color: var(--accent) !important;
+  background: var(--accent-dim) !important;
+}
+
+/* ── Info bar ─────────────────────────────────────────────────────────────── */
+.infoBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 24px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0 10px;
+  flex-shrink: 0;
+}
+
+.infoGenre {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.infoSep {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.infoSim {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.infoBadge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 1px 5px;
+}
+
+.infoHint {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+/* ── Heatmap ──────────────────────────────────────────────────────────────── */
+.heatmapScroll {
+  flex: 1;
+  overflow: auto;
+  min-height: 0;
+}
+
+.heatmapScroll::-webkit-scrollbar { width: 4px; height: 4px; }
+.heatmapScroll::-webkit-scrollbar-track { background: var(--bg-base); }
+.heatmapScroll::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 2px; }
+
+.heatmapWrapper {
+  display: inline-block;
+  min-width: 100%;
+}
+
+.topAxisSpacer {
+  height: 8px;
+}
+
+.topAxis {
+  display: flex;
+  margin-left: 100px;
+  margin-bottom: 4px;
+}
+
+.axisLabelTop {
+  width: 64px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 60px;
+  overflow: hidden;
+}
+
+.axisLabelTop span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  transition: color 0.15s;
+  letter-spacing: 0.05em;
+  text-transform: capitalize;
+}
+
+.axisLabelTop.axisHighlight span {
+  color: var(--text-primary) !important;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.axisLabelLeft {
+  width: 100px;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-align: right;
+  padding-right: 12px;
+  white-space: nowrap;
+  transition: color 0.15s;
+  letter-spacing: 0.05em;
+  text-transform: capitalize;
+}
+
+.axisLabelLeft.axisHighlight {
+  color: var(--text-primary) !important;
+}
+
+.cell {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  transition: opacity 0.15s, transform 0.1s;
+  border: 1px solid transparent;
+  position: relative;
+}
+
+.cell:hover {
+  border-color: var(--border-bright);
+  z-index: 2;
+}
+
+.hoveredCell {
+  border-color: white !important;
+  transform: scale(1.08);
+  z-index: 3 !important;
+}
+
+.diagCell {
+  border: 1px solid var(--border);
+}
+
+.cellValue {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: -0.02em;
+  user-select: none;
+  pointer-events: none;
+  font-weight: 600;
+}
+
+.diagMark {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-dim);
+  user-select: none;
+}
+
+/* ── Method info ──────────────────────────────────────────────────────────── */
+.methodInfo {
+  flex-shrink: 0;
+  font-size: 10px;
+  line-height: 1.4;
+  color: var(--text-secondary);
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+}
+
+.methodInfo p {
+  margin: 0;
+}
+
+.methodInfo strong {
+  color: var(--accent);
+}
+
+/* ── Scale legend ─────────────────────────────────────────────────────────── */
+.scaleLegend {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  padding: 4px 0;
+}
+
+.scaleLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  color: var(--text-dim);
+}
+
+.scaleBar {
+  flex: 1;
+  height: 10px;
+  border-radius: 2px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.scaleGradient {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    var(--bg-raised),
+    rgba(0, 229, 195, 0.2) 30%,
+    rgba(0, 229, 195, 0.5) 60%,
+    rgba(0, 229, 195, 0.9)
+  );
+}

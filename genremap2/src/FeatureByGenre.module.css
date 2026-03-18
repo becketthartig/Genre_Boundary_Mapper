@@ -1,0 +1,286 @@
+/* FeatureByGenre.module.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px 24px;
+  gap: 16px;
+  overflow: hidden;
+}
+
+/* ── Feature selector ──────────────────────────────────────────────────────── */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.controlLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.featureScroll {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  flex: 1;
+  padding-bottom: 4px;
+}
+
+.featureScroll::-webkit-scrollbar { height: 3px; }
+.featureScroll::-webkit-scrollbar-track { background: var(--bg-base); }
+.featureScroll::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 2px; }
+
+.featureBtn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 3px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+  letter-spacing: 0.03em;
+}
+
+.featureBtn:hover {
+  color: var(--text-primary);
+  border-color: var(--border-bright);
+  background: var(--bg-raised);
+}
+
+.featureBtnActive {
+  color: var(--accent) !important;
+  border-color: var(--accent) !important;
+  background: var(--accent-dim) !important;
+}
+
+/* ── Chart layout ─────────────────────────────────────────────────────────── */
+.chartArea {
+  display: flex;
+  flex: 1;
+  gap: 12px;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.yAxisLabels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 28px; /* align with label space */
+  flex-shrink: 0;
+}
+
+.yAxisLabels span {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.chart {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+}
+
+.gridLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ── Boxes ────────────────────────────────────────────────────────────────── */
+.boxes {
+  position: absolute;
+  inset: 0;
+  bottom: 28px; /* space for labels */
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  padding: 0 8px;
+}
+
+.boxWrapper {
+  flex: 1;
+  position: relative;
+  transition: opacity 0.2s;
+  cursor: default;
+}
+
+.boxWrapper.dimmed { opacity: 0.2; }
+.boxWrapper.hovered { z-index: 10; }
+
+/* Whisker vertical line */
+.whisker {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  border-left: 1px dashed;
+  opacity: 0.5;
+}
+
+/* Whisker end caps */
+.whiskerCap {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  width: 10px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+/* IQR box */
+.box {
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  border: 1px solid;
+  border-radius: 2px;
+  transition: background 0.2s;
+}
+
+/* Median line */
+.medianLine {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  height: 2px;
+  border-radius: 1px;
+  transform: translateY(50%);
+  z-index: 2;
+}
+
+/* Mean dot */
+.meanDot {
+  position: absolute;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  transform: translate(-50%, 50%);
+  z-index: 3;
+  opacity: 0.8;
+}
+
+/* Genre label below box */
+.boxLabel {
+  position: absolute;
+  bottom: -26px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-35deg);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+  transform-origin: top center;
+  transition: color 0.15s;
+}
+
+/* ── Tooltip ──────────────────────────────────────────────────────────────── */
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-overlay);
+  border: 1px solid;
+  border-radius: var(--radius-lg);
+  padding: 10px 12px;
+  z-index: 100;
+  width: 150px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  animation: fadeUp 0.1s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(4px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.ttGenre {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: capitalize;
+  margin-bottom: 6px;
+  letter-spacing: 0.05em;
+}
+
+.ttRow {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+  padding: 1px 0;
+}
+
+.ttRow span:last-child {
+  color: var(--text-primary);
+}
+
+.ttDivider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+
+/* ── Legend ───────────────────────────────────────────────────────────────── */
+.legend {
+  display: flex;
+  gap: 20px;
+  flex-shrink: 0;
+  padding-bottom: 4px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.legendBox {
+  display: inline-block;
+  width: 14px;
+  height: 10px;
+  border: 1px solid var(--text-dim);
+  border-radius: 2px;
+  background: rgba(255,255,255,0.05);
+}
+
+.legendLine {
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+  background: var(--text-dim);
+  border-radius: 1px;
+}
+
+.legendDot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-dim);
+}

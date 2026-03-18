@@ -1,0 +1,139 @@
+/* UploadZone.module.css - Updated with genre selector */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.genreSelector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.genreLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+}
+
+.genreSelect {
+  flex: 1;
+  background: var(--bg-base);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-size: 11px;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  text-transform: capitalize;
+}
+
+.genreSelect:hover:not(:disabled) {
+  border-color: var(--border-bright);
+}
+
+.genreSelect:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.genreSelect:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 24px;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-base);
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 120px;
+}
+
+.dropzone:hover {
+  border-color: var(--border-bright);
+  background: var(--bg-raised);
+}
+
+.dragging {
+  border-color: var(--accent) !important;
+  background: var(--accent-dim) !important;
+}
+
+.uploading {
+  border-color: var(--border);
+  background: var(--bg-raised);
+  cursor: wait;
+}
+
+.icon {
+  font-size: 32px;
+  color: var(--text-dim);
+  line-height: 1;
+}
+
+.text {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.or {
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.browse {
+  padding: 4px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 11px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.browse:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.hint {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-dim);
+  text-align: center;
+  font-style: italic;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
